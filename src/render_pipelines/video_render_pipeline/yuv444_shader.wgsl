@@ -1,16 +1,16 @@
 // 顶点着色器
 
 struct VertexInput {
-    [[location(0)]] position: vec3<f32>;
-    [[location(1)]] tex_coords: vec2<f32>;
+    @location(0) position: vec3<f32>,
+    @location(1) tex_coords: vec2<f32>,
 };
 
 struct VertexOutput {
-    [[builtin(position)]] clip_position: vec4<f32>;
-    [[location(0)]] tex_coords: vec2<f32>;
+    @builtin(position) clip_position: vec4<f32>,
+    @location(0) tex_coords: vec2<f32>,
 };
 
-[[stage(vertex)]]
+@vertex
 fn vs_main(
     model: VertexInput,
 ) -> VertexOutput {
@@ -23,17 +23,21 @@ fn vs_main(
 
 // 片元着色器
 
-[[group(0), binding(0)]]
+// [[group(0), binding(0)]]
+@group(0) @binding(0)
 var y_texture: texture_2d<f32>;
-[[group(0), binding(1)]]
+// [[group(0), binding(1)]]
+@group(0) @binding(1)
 var u_texture: texture_2d<f32>;
-[[group(0), binding(2)]]
+// [[group(0), binding(2)]]
+@group(0) @binding(2)
 var v_texture: texture_2d<f32>;
-[[group(0), binding(3)]]
+// [[group(0), binding(3)]]
+@group(0) @binding(3)
 var s_diffuse: sampler;
 
-[[stage(fragment)]]
-fn fs_main(in: VertexOutput) -> [[location(0)]] vec4<f32> {
+@fragment
+fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     var y:f32 = textureSample(y_texture, s_diffuse, in.tex_coords).r;
     var u:f32 = textureSample(u_texture, s_diffuse, in.tex_coords).r;
     var v:f32 = textureSample(v_texture, s_diffuse, in.tex_coords).r;

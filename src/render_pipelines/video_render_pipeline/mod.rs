@@ -1,5 +1,5 @@
 mod yuv444_texture;
-#[path ="../vertex.rs"]
+#[path ="../../vertex.rs"]
 mod vertex;
 use vertex::Vertex;
 
@@ -92,7 +92,7 @@ impl VideoRenderPipeline {
       push_constant_ranges: &[],
     });
 
-    let shader = device.create_shader_module(&wgpu::include_wgsl!("yuv444_shader.wgsl"));
+    let shader = device.create_shader_module(wgpu::include_wgsl!("yuv444_shader.wgsl"));
 
     let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
       label: Some("Video Render Pipeline"),
@@ -107,7 +107,8 @@ impl VideoRenderPipeline {
       fragment: Some(wgpu::FragmentState { // 3.
           module: &shader,
           entry_point: "fs_main",
-          targets: &[wgpu::ColorTargetState { // 4.
+          targets: &[
+            Some(wgpu::ColorTargetState { // 4.
               format: config.format,
               blend: Some(wgpu::BlendState{
                 color: wgpu::BlendComponent{
@@ -117,7 +118,8 @@ impl VideoRenderPipeline {
                 alpha: wgpu::BlendComponent::OVER
             }),
               write_mask: wgpu::ColorWrites::ALL,
-          }],
+          })
+        ],
       }),
       primitive: wgpu::PrimitiveState {
           topology: wgpu::PrimitiveTopology::TriangleList, // 1.
